@@ -1,5 +1,5 @@
 #pragma once
-//myschedule.h
+//myscheduler.h
 /* Students need to define their own data structure to contain
    and access objects from 'thread class'. The 'CreateThread()' 
    function should insert the threads into the student defined

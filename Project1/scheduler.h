@@ -1,6 +1,6 @@
 #pragma once
 
-//schedule.h
+//scheduler.h
 
 ////////////////////////////////////////////////////
 /*This file should not be modified by the students*/
