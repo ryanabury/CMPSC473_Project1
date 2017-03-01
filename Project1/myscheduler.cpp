@@ -11,36 +11,64 @@ void MyScheduler::CreateThread(int arriving_time, int remaining_time, int priori
 	t->priority = priority;
 	t->tid = tid;
 
-	switch (policy) {
-	case FCFS:
-		myQueue.push(*t);
-		break;
+	if (t->arriving_time == 0) {
+		switch (policy) {
+		case FCFS:
+			myQueue.push(*t);
+			break;
 
-	case STRFwoP: case STRFwP: case PBS:
-		myPriority_Queue.push(*t);
-		break;
+		case STRFwoP: case STRFwP: case PBS:
+			myPriority_Queue.push(*t);
+			break;
 
-	default:
-		cout << "Error: Invalid Policy";
-		throw 0;
+		default:
+			cout << "Error: Invalid Policy";
+			throw 0;
+		}
+		cout << "Added thread " << tid << " to Data structure\n";
+	}
+	else {
+		notReadyQueue.push(*t);
+
+		cout << "Added thread " << tid << " to not_ready Queue\n";
 	}
 }
 
 bool MyScheduler::Dispatch()
 {
+	// Check notReadyQueue to see if threads are ready
+	while (!notReadyQueue.empty() && notReadyQueue.top().arriving_time <= timer) {
+		int tid = notReadyQueue.top().tid;
+		switch (policy) {
+		case FCFS:
+			myQueue.push(notReadyQueue.top());
+			notReadyQueue.pop();
+			break;
+
+		case STRFwoP: case STRFwP: case PBS:
+			myPriority_Queue.push(notReadyQueue.top());
+			notReadyQueue.pop();
+			break;
+
+		default:
+			cout << "Error: Invalid Policy";
+			throw 0;
+		}
+		cout << "Swapped thread " << tid << " from queue to Data structure\n";
+	}
+
 	// Check and remove finished threads
 	for (int i = 0; i < num_cpu; i++) {
-		if (CPUs[i] == nullptr)
+		if (CPUs[i] == NULL)
 			continue;
 		if (CPUs[i]->remaining_time <= 0)
-			delete CPUs[i];
-			CPUs[i] = nullptr;
+			CPUs[i] = NULL;
 	}
 
 	//Todo: Check if all the threads are finished; if so, return false
 	bool done = true;
 	for (int i = 0; i < num_cpu; i++) {
-		if (CPUs[i] != nullptr)
+		if (CPUs[i] != NULL)
 			done = false;
 		
 	}
@@ -57,11 +85,11 @@ bool MyScheduler::Dispatch()
 			cout << "Error: Invalid policy";
 			throw 0;
 	}
-
 	if (done) {
 		return false;
 	}
 
+	// Define Policies here
 	switch(policy)
 	{
 		case FCFS:		//First Come First Serve
@@ -71,8 +99,10 @@ bool MyScheduler::Dispatch()
 			// USE myQueue
 
 			for (int i = 0; i < num_cpu; i++) {
-				if (CPUs[i] == nullptr) {
+				if (CPUs[i] == NULL) {
+					cout << "Adding thread " << myQueue.front().tid << " to CPU " << i << "\n";
 					CPUs[i] = &(myQueue.front());
+					myQueue.pop();
 				}
 			}
 
@@ -94,6 +124,21 @@ bool MyScheduler::Dispatch()
 			//	begin executing. 
 
 			// USE myPriorityQueue
+
+			for (int i = 0; i < num_cpu; i++) {				
+				if (CPUs[i] == NULL) {
+					cout << "Adding thread " << myPriority_Queue.top().tid << " to CPU " << i << "\n";
+					CPUs[i] = new ThreadDescriptorBlock(myPriority_Queue.top());
+					myPriority_Queue.pop();
+				}
+				// preemption
+				else if (CPUs[i]->remaining_time > myPriority_Queue.top().remaining_time) {
+					ThreadDescriptorBlock* t = new ThreadDescriptorBlock(myPriority_Queue.top());
+					cout << "Adding thread " << t->tid << " to CPU " << i << "\n";
+					CPUs[i] = t;
+					myPriority_Queue.pop();
+				}
+			}
 
 			break;
 		case PBS:		//Priority Based Scheduling, with preemption

@@ -13,6 +13,11 @@
 #include <vector>
 
 //Define your data structure here.
+struct OrderByArrivalTime {
+	bool operator() (const ThreadDescriptorBlock& lhs, const ThreadDescriptorBlock& rhs) {
+		return lhs.arriving_time < rhs.arriving_time;
+	}
+};
 
 class MyScheduler: public Scheduler {
 public:
@@ -38,5 +43,8 @@ private:
 
 	// Use in FCFS
 	std::queue<ThreadDescriptorBlock> myQueue;
+
+	// Used in implementing "arrival_time"
+	std::priority_queue<ThreadDescriptorBlock, vector<ThreadDescriptorBlock>, OrderByArrivalTime> notReadyQueue;
 
 };
