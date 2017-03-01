@@ -4,7 +4,12 @@
 
 void MyScheduler::CreateThread(int arriving_time, int remaining_time, int priority, int tid) //Thread ID not Process ID
 {
-	MyThread* t = new MyThread(arriving_time, remaining_time, priority, tid);
+	ThreadDescriptorBlock* t = new ThreadDescriptorBlock();
+
+	t->arriving_time = arriving_time;
+	t->remaining_time = remaining_time;
+	t->priority = priority;
+	t->tid = tid;
 
 	switch (policy) {
 	case FCFS:
@@ -24,10 +29,38 @@ void MyScheduler::CreateThread(int arriving_time, int remaining_time, int priori
 bool MyScheduler::Dispatch()
 {
 	// Check and remove finished threads
-	
+	for (int i = 0; i < num_cpu; i++) {
+		if (CPUs[i] == nullptr)
+			continue;
+		if (CPUs[i]->remaining_time <= 0)
+			delete CPUs[i];
+			CPUs[i] = nullptr;
+	}
 
 	//Todo: Check if all the threads are finished; if so, return false
+	bool done = true;
+	for (int i = 0; i < num_cpu; i++) {
+		if (CPUs[i] != nullptr)
+			done = false;
+		
+	}
+	switch (policy) {
+		case FCFS:
+			if (!myQueue.empty())
+				done = false;
+			break;
+		case STRFwoP: case STRFwP: case PBS:
+			if (!myPriority_Queue.empty())
+				done = false;
+			break;
+		default:
+			cout << "Error: Invalid policy";
+			throw 0;
+	}
 
+	if (done) {
+		return false;
+	}
 
 	switch(policy)
 	{
@@ -36,6 +69,12 @@ bool MyScheduler::Dispatch()
 			// Implemented most quickly with a regular queue, rather simple
 
 			// USE myQueue
+
+			for (int i = 0; i < num_cpu; i++) {
+				if (CPUs[i] == nullptr) {
+					CPUs[i] = &(myQueue.front());
+				}
+			}
 
 			break;
 		case STRFwoP:	//Shortest Time Remaining First, without preemption

@@ -23,26 +23,20 @@ public:
 	//Declare additional methods(s) below if needed.
 
 	friend bool operator<(const ThreadDescriptorBlock& lhs, const ThreadDescriptorBlock& rhs) {
-		switch (policy) {
-		case FCFS:
-			break;
-
-		case STRFwoP: case STRFwP: case PBS:
-
-			break;
-
-		default:
-			cout << "ERROR: Invallid policy";
-			throw 0;
+		if (lhs.priority == rhs.priority) {
+			return lhs.remaining_time < rhs.remaining_time;
+		}
+		else {
+			return lhs.priority < rhs.priority;
 		}
 	}
 
 
 private:
 	// Use in STRFwoP, STRFwP, PBS
-	std::priority_queue<MyThread> myPriority_Queue;
+	std::priority_queue<ThreadDescriptorBlock> myPriority_Queue;
 
 	// Use in FCFS
-	std::queue<MyThread> myQueue;
+	std::queue<ThreadDescriptorBlock> myQueue;
 
 };
