@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
 	cout << "Testbench via Alexandar Devic\n\n";
 
 	cout << "\tUsing FCFS, no priority\n";
-	MyScheduler ms = MyScheduler(Policy::PBS, 1);
+	MyScheduler ms = MyScheduler(Policy::FCFS, 4);
 	ms.CreateThread(0, 1, 2, 00);
 	ms.CreateThread(1, 128, 3, 07);
 	ms.CreateThread(31, 2, 5, 01);

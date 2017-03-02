@@ -2,6 +2,10 @@
 /*Define all the functions in 'myschedule.h' here.*/
 #include "myscheduler.h"
 
+//////////////////////////////////////////////////
+/* Authors: Ryan Bury, Tyler Bohrer, Sam Barnes */
+//////////////////////////////////////////////////
+
 void MyScheduler::CreateThread(int arriving_time, int remaining_time, int priority, int tid) //Thread ID not Process ID
 {
 	ThreadDescriptorBlock* t = new ThreadDescriptorBlock();
@@ -30,7 +34,7 @@ void MyScheduler::CreateThread(int arriving_time, int remaining_time, int priori
 	else {
 		notReadyQueue.push(*t);
 
-		cout << "Added thread " << tid << " to not_ready Queue\n";
+		//cout << "Added thread " << tid << " to not_ready Queue\n";
 	}
 }
 
@@ -54,20 +58,12 @@ bool MyScheduler::Dispatch()
 			cout << "Error: Invalid Policy";
 			throw 0;
 		}
-		cout << "Swapped thread " << tid << " from NotReady_queue to Data structure\n";
+		cout << "Thread " << tid << " has arrived and is waiting\n";
 	}
 
-	// Check and remove finished threads
-	for (int i = 0; i < num_cpu; i++) {
-		if (CPUs[i] == NULL)
-			continue;
-		if (CPUs[i]->remaining_time <= 0)
-			CPUs[i] = NULL;
-	}
-
-	//Todo: Check if all the threads are finished; if so, return false
+	// Check if all the threads are finished; if so, return false
 	bool done = true;
-	for (int i = 0; i < num_cpu; i++) {
+	for (int i = 0; i < num_cpu; ++i) {
 		if (CPUs[i] != NULL)
 			done = false;
 		
@@ -100,7 +96,7 @@ bool MyScheduler::Dispatch()
 
 			// USE myQueue
 
-			for (int i = 0; i < num_cpu; i++) {
+			for (int i = 0; i < num_cpu; ++i) {
 				if (myQueue.empty())
 					continue;
 				if (CPUs[i] == NULL) {
@@ -119,7 +115,7 @@ bool MyScheduler::Dispatch()
 
 			// USE myPriorityQueue
 
-			for (int i = 0; i < num_cpu; i++) {
+			for (int i = 0; i < num_cpu; ++i) {
 				if (myPriority_Queue.empty())
 					continue;
 				if (CPUs[i] == NULL) {
@@ -139,7 +135,7 @@ bool MyScheduler::Dispatch()
 
 			// USE myPriorityQueue
 
-			for (int i = 0; i < num_cpu; i++) {	
+			for (int i = 0; i < num_cpu; ++i) {	
 				// Make sure PriorityQueue isn't empty, otherwise errors. 
 				if (myPriority_Queue.empty())
 					continue;
@@ -174,7 +170,7 @@ bool MyScheduler::Dispatch()
 
 			// USE myPriorityQueue
 
-			for (int i = 0; i < num_cpu; i++) {
+			for (int i = 0; i < num_cpu; ++i) {
 				if (myPriority_Queue.empty())
 					continue;
 				if (CPUs[i] == NULL) {
