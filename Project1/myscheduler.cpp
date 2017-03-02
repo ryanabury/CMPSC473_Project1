@@ -54,7 +54,7 @@ bool MyScheduler::Dispatch()
 			cout << "Error: Invalid Policy";
 			throw 0;
 		}
-		cout << "Swapped thread " << tid << " from queue to Data structure\n";
+		cout << "Swapped thread " << tid << " from NotReady_queue to Data structure\n";
 	}
 
 	// Check and remove finished threads
@@ -72,6 +72,8 @@ bool MyScheduler::Dispatch()
 			done = false;
 		
 	}
+	if (!notReadyQueue.empty())
+		done = false;
 	switch (policy) {
 		case FCFS:
 			if (!myQueue.empty())
@@ -115,6 +117,16 @@ bool MyScheduler::Dispatch()
 
 			// USE myPriorityQueue
 
+			for (int i = 0; i < num_cpu; i++) {
+				if (myPriority_Queue.empty())
+					continue;
+				if (CPUs[i] == NULL) {
+					cout << "Adding thread " << myPriority_Queue.top().tid << " to CPU " << i << "\n";
+					CPUs[i] = new ThreadDescriptorBlock(myPriority_Queue.top());
+					myPriority_Queue.pop();
+				}
+			}
+
 			break;
 		case STRFwP:	//Shortest Time Remaining First, with preemption
 
@@ -125,15 +137,26 @@ bool MyScheduler::Dispatch()
 
 			// USE myPriorityQueue
 
-			for (int i = 0; i < num_cpu; i++) {				
+			for (int i = 0; i < num_cpu; i++) {	
+				// Make sure PriorityQueue isn't empty, otherwise errors. 
+				if (myPriority_Queue.empty())
+					continue;
+				// Add highest priority thread to idle CPUs
 				if (CPUs[i] == NULL) {
 					cout << "Adding thread " << myPriority_Queue.top().tid << " to CPU " << i << "\n";
 					CPUs[i] = new ThreadDescriptorBlock(myPriority_Queue.top());
 					myPriority_Queue.pop();
 				}
-				// preemption
-				else if (CPUs[i]->remaining_time > myPriority_Queue.top().remaining_time) {
-					ThreadDescriptorBlock* t = new ThreadDescriptorBlock(myPriority_Queue.top());
+				// Implement Preemption 
+				//	1. remove thread from CPU and insert back into Priority Queue
+				//	2. Insert new thread into CPU and pop from Priority Queue
+				else if (CPUs[i]->remaining_time > myPriority_Queue.top().remaining_time) {					
+					ThreadDescriptorBlock *t;
+					t = CPUs[i];
+					myPriority_Queue.push(*t);
+					cout << "Removing thread " << t->tid << " from CPU " << i << "\n";
+					
+					t = new ThreadDescriptorBlock(myPriority_Queue.top());
 					cout << "Adding thread " << t->tid << " to CPU " << i << "\n";
 					CPUs[i] = t;
 					myPriority_Queue.pop();
@@ -148,6 +171,27 @@ bool MyScheduler::Dispatch()
 			//	inserted into the queue it is run immediately. 
 
 			// USE myPriorityQueue
+
+			for (int i = 0; i < num_cpu; i++) {
+				if (myPriority_Queue.empty())
+					continue;
+				if (CPUs[i] == NULL) {
+					cout << "Adding thread " << myPriority_Queue.top().tid << " to CPU " << i << "\n";
+					CPUs[i] = new ThreadDescriptorBlock(myPriority_Queue.top());
+					myPriority_Queue.pop();
+				}
+				else if (CPUs[i]->priority > myPriority_Queue.top().priority) {
+					ThreadDescriptorBlock *t;
+					t = CPUs[i];
+					myPriority_Queue.push(*t);
+					cout << "Removing thread " << t->tid << " from CPU " << i << "\n";
+
+					t = new ThreadDescriptorBlock(myPriority_Queue.top());
+					cout << "Adding thread " << t->tid << " to CPU " << i << "\n";
+					CPUs[i] = t;
+					myPriority_Queue.pop();
+				}
+			}
 
 			break;
 		default :

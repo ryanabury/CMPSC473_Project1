@@ -15,7 +15,8 @@
 //Define your data structure here.
 struct OrderByArrivalTime {
 	bool operator() (const ThreadDescriptorBlock& lhs, const ThreadDescriptorBlock& rhs) {
-		return lhs.arriving_time < rhs.arriving_time;
+		// Uses greater than sign to implement min_heap because reasons
+		return lhs.arriving_time > rhs.arriving_time;
 	}
 };
 
@@ -28,11 +29,14 @@ public:
 	//Declare additional methods(s) below if needed.
 
 	friend bool operator<(const ThreadDescriptorBlock& lhs, const ThreadDescriptorBlock& rhs) {
+		// Considers priority first (to handle PBS) then considers remaining_time (to handle STRFwP and STRFwoP)
 		if (lhs.priority == rhs.priority) {
-			return lhs.remaining_time < rhs.remaining_time;
+			// Uses greater than sign to implement min_heap because reasons
+			return lhs.remaining_time > rhs.remaining_time;
 		}
 		else {
-			return lhs.priority < rhs.priority;
+			// Uses greater than sign to implement min_heap because reasons
+			return lhs.priority > rhs.priority;
 		}
 	}
 
@@ -44,7 +48,7 @@ private:
 	// Use in FCFS
 	std::queue<ThreadDescriptorBlock> myQueue;
 
-	// Used in implementing "arrival_time"
+	// Used in implementing "arrival_time" feature
 	std::priority_queue<ThreadDescriptorBlock, vector<ThreadDescriptorBlock>, OrderByArrivalTime> notReadyQueue;
 
 };
