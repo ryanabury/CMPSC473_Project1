@@ -101,6 +101,8 @@ bool MyScheduler::Dispatch()
 			// USE myQueue
 
 			for (int i = 0; i < num_cpu; i++) {
+				if (myQueue.empty())
+					continue;
 				if (CPUs[i] == NULL) {
 					cout << "Adding thread " << myQueue.front().tid << " to CPU " << i << "\n";
 					CPUs[i] = &(myQueue.front());
