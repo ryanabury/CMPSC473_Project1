@@ -31,6 +31,8 @@ int main(int argc, char* argv[])
 	ms.CreateThread(31, 32, 8, 05);		
 
 	ms.Go();
+	// starting the random generator for the test bench
+
 	/*Results should be:
 	Thread ID : 0 Finishing Time : 1 CPU No. : 1
 	Thread ID : 1 Finishing Time : 3 CPU No. : 1
