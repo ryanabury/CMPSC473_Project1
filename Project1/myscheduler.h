@@ -8,6 +8,10 @@
    declaration in this file, define in 'myschedule.cpp')
    which they might find helpful.*/
 
+   //////////////////////////////////////////////////
+   /* Authors: Ryan Bury, Tyler Bohrer, Sam Barnes */
+   //////////////////////////////////////////////////
+
 #include "scheduler.h"
 #include <queue>
 #include <vector>
