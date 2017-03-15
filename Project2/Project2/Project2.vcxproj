@@ -117,8 +117,10 @@
     <ClCompile Include="ThreadTests.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="FixHoldAndWait.h" />
     <ClInclude Include="FixMutualExclusion.h" />
     <ClInclude Include="FixCircularWait.h" />
+    <ClInclude Include="FixPreemption.h" />
     <ClInclude Include="ThreadTests.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

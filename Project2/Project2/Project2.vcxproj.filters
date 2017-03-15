@@ -41,5 +41,11 @@
     <ClInclude Include="FixCircularWait.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FixHoldAndWait.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FixPreemption.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

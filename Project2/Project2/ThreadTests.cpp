@@ -5,8 +5,8 @@
 
 #include "ThreadTests.h"
 #include "FixMutualExclusion.h"
-//#include "FixHoldAndWait.h"
-//#include "FixPreemption.h"
+#include "FixHoldAndWait.h"
+#include "FixPreemption.h"
 #include "FixCircularWait.h"
 
 //////////////////////////////////////////
@@ -77,6 +77,7 @@ int main() {
 
 		t[0].join();
 		t[1].join();
+		cout << "Successfully rejoined!" << "\n";
 		break;
 	case 1:
 		cout << "Demonstrating Mutual Exclusion Fix..." << "\n";
@@ -87,12 +88,29 @@ int main() {
 
 		t[0].join();
 		t[1].join();
+		cout << "Successfully rejoined!" << "\n";
 		break;
 	case 2:
+		cout << "Demonstrating Hold And Wait Fix..." << "\n";
+		t[0] = thread(fun2A, 0);
+		t[1] = thread(fun2B, 1);
 
+		protected_print("Hello, world from Main \n");
+
+		t[0].join();
+		t[1].join();
+		cout << "Successfully rejoined!" << "\n";
 		break;
 	case 3:
+		cout << "Demonstrating Preemption Fix..." << "\n";
+		t[0] = thread(fun3A, 0);
+		t[1] = thread(fun3B, 1);
 
+		protected_print("Hello, world from Main \n");
+
+		t[0].join();
+		t[1].join();
+		cout << "Successfully rejoined!" << "\n";
 		break;
 	case 4:
 		cout << "Demonstrating Circular Wait Fix..." << "\n";
@@ -102,7 +120,8 @@ int main() {
 		protected_print("Hello, world from Main \n");
 
 		t[0].join();
-		t[1].join();		
+		t[1].join();
+		cout << "Successfully rejoined!" << "\n";
 		break;
 	}
 
