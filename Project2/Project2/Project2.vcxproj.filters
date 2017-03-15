@@ -18,5 +18,28 @@
     <ClCompile Include="ThreadTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FixMutualExclusion.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FixHoldAndWait.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FixPreemption.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FixCircularWait.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ThreadTests.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FixMutualExclusion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FixCircularWait.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

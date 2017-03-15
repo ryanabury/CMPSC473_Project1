@@ -110,7 +110,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="FixCircularWait.cpp" />
+    <ClCompile Include="FixHoldAndWait.cpp" />
+    <ClCompile Include="FixMutualExclusion.cpp" />
+    <ClCompile Include="FixPreemption.cpp" />
     <ClCompile Include="ThreadTests.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="FixMutualExclusion.h" />
+    <ClInclude Include="FixCircularWait.h" />
+    <ClInclude Include="ThreadTests.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

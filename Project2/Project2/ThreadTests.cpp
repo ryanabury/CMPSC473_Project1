@@ -1,7 +1,18 @@
-#include <iostream>
-#include <thread>
-#include <mutex>
-#include <string>
+///////////////////////////////////
+// File: ThreadTests.cpp
+// Author: Ryan Bury
+
+
+#include "ThreadTests.h"
+#include "FixMutualExclusion.h"
+//#include "FixHoldAndWait.h"
+//#include "FixPreemption.h"
+#include "FixCircularWait.h"
+
+//////////////////////////////////////////
+// Main Entry Point:                    //
+//  - Also used to demonstrate Deadlock //
+//////////////////////////////////////////
 
 using namespace std;
 
@@ -45,31 +56,59 @@ void funB(int tid) {
 	mA.unlock();
 }
 
-void call_from_thread(int tid) {
-	string str = "Hello, World From thread " + to_string(tid) + "\n";
-	protected_print(str);
-}
-
 int main() {
+	int input = 0;
 	thread t[num_threads];
 
-	t[0] = thread(funA, 0);
-	t[1] = thread(funB, 1);
+	cout << "Select one: " << "\n"
+		<< "0. Demonstrate Deadlock" << "\n"
+		<< "1. Fix Mutual Exclusion Issue" << "\n"
+		<< "2. Fix \"Hold and wait\" Issue" << "\n"
+		<< "3. Fix Preemption Issue" << "\n"
+		<< "4. Fix Circular Wait Issue" << "\n";
+	cin >> input;
+	switch (input) {
+	case 0: 
+		cout << "Demonstrating Deadlock..." << "\n";
+		t[0] = thread(funA, 0);
+		t[1] = thread(funB, 1);
 
-	/*for (int i = 0; i < num_threads; ++i) {
-		t[i] = std::thread(call_from_thread, i);
-	}*/
+		protected_print("Hello, world from Main \n");
 
-	protected_print("Hello, world from Main \n");
+		t[0].join();
+		t[1].join();
+		break;
+	case 1:
+		cout << "Demonstrating Mutual Exclusion Fix..." << "\n";
+		t[0] = thread(fun1A, 0);
+		t[1] = thread(fun1B, 1);
 
-	/*for (int i = 0; i < num_threads; ++i) {
-		t[i].join();
-	}*/
-	t[0].join();
-	t[1].join();
+		protected_print("Hello, world from Main \n");
 
-	int i;
-	cin >> i;
+		t[0].join();
+		t[1].join();
+		break;
+	case 2:
+
+		break;
+	case 3:
+
+		break;
+	case 4:
+		cout << "Demonstrating Circular Wait Fix..." << "\n";
+		t[0] = thread(fun4A, 0);
+		t[1] = thread(fun4B, 1);
+
+		protected_print("Hello, world from Main \n");
+
+		t[0].join();
+		t[1].join();		
+		break;
+	}
+
+	
+	cout << "Enter -1 to Exit" << "\n";
+	cin >> input;
 
 	return 0;
 }
