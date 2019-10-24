@@ -101,7 +101,7 @@ bool MyScheduler::Dispatch()
 					continue;
 				if (CPUs[i] == NULL) {
 					cout << "Adding thread " << myQueue.front().tid << " to CPU " << i << "\n";
-					CPUs[i] = &(myQueue.front());
+					CPUs[i] = new ThreadDescriptorBlock(myQueue.front());
 					myQueue.pop();
 				}
 			}
